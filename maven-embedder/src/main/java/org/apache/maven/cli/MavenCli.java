@@ -45,6 +45,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.UnrecognizedOptionException;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.maven.BuildAbort;
 import org.apache.maven.InternalErrorException;
 import org.apache.maven.Maven;
@@ -402,11 +403,13 @@ public class MavenCli
 
             if ( configFile.isFile() )
             {
+                StrSubstitutor systemPropertiesSubstitutor = new StrSubstitutor( ( Map ) System.getProperties() );
+
                 for ( String arg : Files.toString( configFile, Charsets.UTF_8 ).split( "\\s+" ) )
                 {
                     if ( !arg.isEmpty() )
                     {
-                        args.add( arg );
+                        args.add( systemPropertiesSubstitutor.replace( arg ) );
                     }
                 }
 

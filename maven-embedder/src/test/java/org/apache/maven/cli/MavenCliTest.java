@@ -83,11 +83,13 @@ public class MavenCliTest
         cli.cli( request );
         assertEquals( "multithreaded", request.commandLine.getOptionValue( CLIManager.BUILDER ) );
         assertEquals( "8", request.commandLine.getOptionValue( CLIManager.THREADS ) );
+        assertEquals( new File( "src/test/projects/config/.mvn/settings.xml" ).getCanonicalPath(), request.commandLine.getOptionValue( "settings" ) );
 
         // override from command line
-        request = new CliRequest( new String[] { "--builder", "foobar" }, null );
+        request = new CliRequest( new String[] { "--builder", "foobar", "-s", "settings.xml" }, null );
         cli.cli( request );
         assertEquals( "foobar", request.commandLine.getOptionValue( "builder" ) );
+        assertEquals( "settings.xml", request.commandLine.getOptionValue( "settings" ) );
     }
 
     public void testMavenConfigInvalid()
